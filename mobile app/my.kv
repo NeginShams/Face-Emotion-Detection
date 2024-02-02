@@ -1,0 +1,205 @@
+WindowManager:
+    MainWindow:
+    SecondWindow:
+    ThirdWindow:
+
+<MainWindow>:
+    name: "main"
+
+    FloatLayout:
+        Image:
+            size_hint: 0.8, 0.09
+            pos_hint: {'x':.1, 'y':.85}
+            source: "images\gify2.gif"
+        Image:
+            size_hint: 0.5, 0.4
+            pos_hint: {'x':.25, 'y':.45}
+            source: "images\loader3.gif"
+            anim_delay: 0.08
+            allow_stretch: True
+            keep_ratio: False
+
+        Label:
+            text: "ENG"
+            pos_hint: {'x':.3, 'y':.24}
+            size_hint: 0.2, 0.2 
+        CheckBox:
+            group: "language"
+            active: True
+            #value: "Fa"
+            value: root.eng
+            pos_hint: {'x':.37, 'y':.27}
+            size_hint_x: 0.15
+            size_hint_y: 0.15
+        
+        Label:
+            text: "FA"
+            pos_hint: {'x':.45, 'y':.24}
+            size_hint: 0.2, 0.2 
+
+        CheckBox:
+            group: "language"
+            value: root.fa
+            pos_hint: {'x':.52, 'y':.27}
+            size_hint: 0.15, 0.15
+            on_active:root.checked(self, self.active)
+
+        Button:
+            background_normal: 'images\cam.png'
+            size_hint: 0.2, 0.15
+            pos_hint: {'x':.55, 'y':.1}
+            border: 30,30,30,30
+            #border: 10,10,10,10
+
+            #on_press: root.gallery_pressed()
+            on_press:
+                root.manager.transition.direction = 'left'
+                root.manager.current = "third"
+
+        Button:
+            background_normal: 'images\gal.png'
+            size_hint: 0.2, 0.15
+            pos_hint: {'x':.25, 'y':.1}
+            on_press:
+                root.manager.current = "second"
+
+<SecondWindow>:
+    name: "second"
+    my_image: my_image
+    my_label: my_label
+    file_btn: file_btn
+    ok_btn:
+    retry_btn:
+    loader_image:
+
+    back_btn: back_btn
+
+    on_pre_enter: root.pre()
+
+    FloatLayout:
+        id: float
+        Button:
+            id: back_btn
+            #text:'back'
+            text:root.back_text
+            #font_name: 'Amiri-BoldSlanted.ttf'
+            font_name: 'FontsFree-Net-ir_sans'
+            #font_name: 'arial.ttf'
+            on_press: root.go_back()
+            pos_hint: {'x':0.01, 'y':0.9}
+            size_hint: 0.1, 0.1
+        Image:
+            id: my_image
+            size_hint: 0.4, 0.4
+            pos_hint: {'x':.3, 'y':.5}
+            source: "images\surprise.png"
+            allow_stretch: True
+            keep_ratio: False
+
+        Label:
+            id:my_label
+            text: ""
+            font_name: 'FontsFree-Net-ir_sans'
+            color: 1, 0, 0
+            font_size: 32
+            size_hint: 0.2, 0.1
+            pos_hint: {'x':.4, 'y':.3}
+
+        Button:
+            id: file_btn
+            #text:'Open File Explorer'
+            font_name: 'FontsFree-Net-ir_sans'
+            size_hint: 0.4, 0.1
+            pos_hint: {'x':.3, 'y':.2}
+            on_release: 
+                root.show_load1()
+
+
+<LoadDialog>:
+    cancel_btn: cancel_btn
+    load_btn: load_btn
+
+    on_parent: root.pre()
+
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                id:cancel_btn
+                font_name: 'FontsFree-Net-ir_sans'
+                #text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                id: load_btn
+                font_name: 'FontsFree-Net-ir_sans'
+                #text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<ThirdWindow>:
+    name: "third"
+
+    back_btn: back_btn
+    cap_btn: cap_btn
+    float2: float2
+    my_label: my_label
+    #my_photo: my_photo
+    on_pre_enter: root.pre()
+    FloatLayout:
+        id: float2
+        Button:
+            id: back_btn
+            #text:'back'
+            text:root.back_text
+            font_name: 'FontsFree-Net-ir_sans'
+            on_press: root.go_back()
+            pos_hint: {'x':0.01, 'y':0.9}
+            size_hint: 0.1, 0.1
+        Camera:
+            id: camera
+            resolution: (640, 480)
+            #play: False
+            play: True
+            size_hint: 0.4, 0.4
+            pos_hint: {'x':.3, 'y':.5}
+
+        Button:
+            id: cap_btn
+            size_hint: 0.15, 0.2
+            pos_hint: {'x':.44 , 'y':.2}
+
+            # canvas:
+            #     Color:
+            #         rgba: 88, 88, 88,
+            #     Rectangle:
+            #         size: (80,80) # choose a value of a which fit the most with your button
+            #         pos: (self.pos[0]+self.size[0]/2.0) - 80/2.0, (self.pos[1]+self.size[1]/2.0) - 80/2.0
+            #         #source: 'images\shutter.png'
+            #         source: 'images\cap5.png'
+            background_normal: 'images\cap5.png'
+            #border: 30,30,30,30
+
+            on_press: root.capture()
+            #allow_stretch: True
+            #keep_ratio: False
+
+        Label:
+            id:my_label
+            text: ""
+            font_name: 'FontsFree-Net-ir_sans'
+            color: 1, 0, 0
+            font_size: 32
+            size_hint: 0.2, 0.1
+            pos_hint: {'x':.4, 'y':.3}
+            
+
+        # Image:
+        #     id: my_photo
+        #     source: ""
